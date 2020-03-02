@@ -1,0 +1,144 @@
+---
+title: "Exercício RESOLVIDO: 03-03-2020"
+output: html_notebook
+---
+
+# Coleta de Dados do Twitter
+
+Neste primeiro exercício, vamos fazer uma coleta básica de dados do Twitter. Primeiro passo, vamos carregar o pacote necessário, twitteR.
+
+```{r warning=FALSE}
+# install.packages("twitteR")
+library(twitteR)
+```
+Para usar o twitteR, precisamos das credenciais do Twitter, que são disponibilizadas quando criamos um app no developer.twitter.com. Entre lá, crie sua conta e substitua os campos com "x" de acordo com o fornecido pelo Twitter (ou use as credenciais fornecidas).
+
+P.s.: Nesta parte talvez o R te peça para responder (na parte console do RStudio) se você quer salvar o arquivo .httr-oauth. Ele serve para não precisar ficar fazendo esta autenticação várias vezes. Sugiro salvar. Para salver, digite "1" no console quando o R pedir (para não salvar é "2").
+
+```{r Autenticação}
+setup_twitter_oauth(consumer_key = 'xxx',
+consumer_secret = 'yyy',
+access_token = 'zzz',
+access_secret = 'vvv')
+```
+
+# 1: Termos de busca
+
+Pense em um construto que deseja buscar coisas a respeito no Twitter (e.g. Autoestima, felicidade, etc.). Elabore pelo menos três termos de busca, você pode testá-los através do *search.twitter.com*.
+
+Mais informações sobre buscas no Twitter aqui: https://developer.twitter.com/en/docs/tweets/search/api-reference/get-search-tweets e aqui: https://developer.twitter.com/en/docs/tweets/search/guides/standard-operators
+
+## Termos de busca escolhidos:
+
+-
+
+-
+
+-
+
+-
+
+# 2: Realizando a busca
+
+Substitua o script a seguir com os termos de busca escolhidos:
+
+```{r Busca}
+
+palavras_chave <- c('"tentei me matar" OR "quero morrer" OR "queria estar morto" -filter:retweets')
+
+pesquisa <- searchTwitter(searchString = palavras_chave, n = 1250)
+
+# Obs.: você pode querer coletar mais tuítes modificando o valor de "n".
+
+```
+
+Dependendo dos termos de busca criados, você pode ter resultados de outras línguas. Leia a descrição da funlão *searchTwitter()*, usando a busca do RStudio ou a documentação do pacotece e faça as modificações necessárias no script anterior para selecionar somente resultados e português brasileiro. 
+
+Documentação do *twitteR*: https://cran.r-project.org/web/packages/twitteR/twitteR.pdf
+
+Extra: você pode pensar em outro parâmetro, que a função *searchTwitter()* tenha que possa ser útil para selecionar melhor os tuítes? E usando os parâmetros da API de busca do próprio twitter? (Ou seja, colocando oppões adicionais na busca).
+
+# 3: twListToDF()
+
+Uma das coisas mais importantes (e mais difíceis de se acostumar no R) é como fazer seleções nos dados. Vamos treinar um pouco isso.
+
+Os dados fornecidos pela função *searchTwitter()* estão num formato de lista, que não é tão intuitivo. Felizmente o pacote *twitteR* tem outra função, *twListToDF()*, que nos permite transformar este banco em um data.frame.
+
+Leia a documentação da função e transforme os resultados da sua busca em um data.frame.
+
+```{r de Lista para DF}
+
+# p.s.: lembre-se de colocar o resultado num objeto.
+# ex.:
+pesquisa <- twListToDF(pesquisa)
+
+
+```
+
+# 4: Seleção de dados e estatística descritiva
+
+Vamos fazer algumas seleções básicas dos dados. No *chunk* a seguir eu forneço alguns exemplos de seleção dos dados. Reproduza o que fiz buscando o que se pede.
+
+Para relembrar como selecionar dados: https://www.statmethods.net/management/subset.html
+
+P.s.: Nesta parte eu imagino que você não vá lembrar ou saber de tudo de cabeça; 90% do trabalho é pesquisar no Google/DuckDuckGo como se faz coisas simples, como tirar uma média ou mostrar uma quantidade.
+
+```{r Quantidade de retuítes }
+
+# Somente o número de retuítes:
+pesquisa$retweetCount #ou
+pesquisa[, "retweetCount"]
+
+
+# Cinco primeiros tuítes, somente texto:
+pesquisa[1:5, "text"]
+
+```
+
+
+## Mostre os cinco primeiros tuítes e apenas a "text".
+
+```{r}
+
+pesquisa[1:5, c('text')]
+
+```
+
+## Qual o tuíte com mais favoritos?
+
+P.s.: a funação *table()* é uma maneira de ver isso (mas nem de longe a única). Tente usá-la pq ela é útil para váaaaaarias coisas.
+
+```{r}
+
+table(pesquisa$favoriteCount)
+
+```
+
+## Faça um gráfico da distribuição da contagem de favoritos.
+
+P.s.: use a função *hist()* ou *plot()* para fazer o gráfico e dentro dele passe apenas a seleção da coluna favoriteCount.
+
+```{r}
+
+hist(pesquisa$favoriteCount)
+
+```
+
+
+## Repita o gráfico anterior, mas exclua os tuítes com zero favoritos.
+
+```{r}
+
+hist(pesquisa[pesquisa$favoriteCount > 0, 'favoriteCount'])
+
+```
+
+
+## Qual a média de favoritos dos tuítes? E excluindo-se os com zero?
+
+```{r}
+
+mean(pesquisa$favoriteCount)
+mean(pesquisa[pesquisa$favoriteCount > 0, 'favoriteCount'])
+
+```
