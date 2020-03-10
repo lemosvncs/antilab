@@ -1,0 +1,55 @@
+---
+title: "Exercício 10-03-2020: Regressão"
+output: html_notebook
+---
+
+Neste exercício, vamos fazer algumas regressões simples e analisar resultados.
+
+# Leitura de Dados
+
+Muitos pacotes do R tem bancos de dados de exemplo. O pacote *psych* tem vários bancos de dados relacionados à psicologia. O banco de dados "bfi", tem respostas de uma escala de Big-5. Vamos ler os dados do *chunck* a seguir. Para isso, basta usar a função *data()* e o nome do banco de dados que você quer ler.
+
+```{r Lendo Bancos de Exemplo}
+
+library(psych)
+data("bfi")
+summary(bfi) # Função do Psych que mostra informações úteis
+
+```
+
+# Exercícios
+
+Vamos partir para as análises. Não vou focar na rigorosidade estatística. Vou falar o que deve ser feito e fazer um exemplo simples. Tente ler a descrição das funções ou usar tutoriais para fazer o que se pede. Você pode fazer com as variáveis que quiser do banco BFI ou qualquer outro que achar interessante (BFI eu sei que tá formatado direitinho).
+
+Documentação da função de regressão: https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/lm
+Material de apoio: https://www.youtube.com/watch?v=zFEP-lJ1LD0
+Andy Field, Learning Statistics With R
+
+
+
+```{r Exemplo}
+
+# library(psych)
+data(iris3)
+iris
+# Descrição para saber com o que estamos lidando
+summary(iris) # Função do Psych que mostra informações úteis
+
+# Plotando variáveis para saber se verificar uma relação linear faz algum sentido
+
+plot(iris$Sepal.Length, iris$Petal.Length)  # Razoavelmente linear
+plot(iris$Sepal.Length, iris$Sepal.Width)   # Não linear
+
+fit <- lm(Sepal.Length ~ Sepal.Length, data = iris)
+```
+
+## 1. Escolha duas variáveis quaisquer. Faça uma gráfico de dispersão entre as duas variáveis.
+
+## 2. Faça um modelo de regressão simples, entre essas duas variáveis (ou seja, uma variável prevendo o valor de outra variável.
+
+## 3. Peça os resultados desta regressão (os resultados em texto descrevendo o modelo). Qual o valor o intercepto e beta?
+
+## 3. Peça os gráficos padrões (ex.: *plot(fit)*).
+
+## 4. Agora faça um modelo de regressão prevendo o valor de uma variável de acordo com outras duas variáveis. Peça os resultados deste modelo de regressão.
+
